@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\API\BaseController;
+use App\Http\Requests\Student\CreateStudentRequest;
 use App\Services\Student\CreateStudentAccountService;
 use Illuminate\Http\Request;
 
@@ -16,14 +17,9 @@ class StudentController extends BaseController
         $this->createStudentAccountService = $createStudentAccountService;
     }
 
-    public function store(Request $request)
+    public function store(CreateStudentRequest $request)
     {
-        $studentArray = [
-            "name" => $request->name,
-            "email" => $request->email,
-            "password" => $request->password
-        ];
-        $studentAccount = $this->createStudentAccountService->execute($studentArray);
+        $studentAccount = $this->createStudentAccountService->execute($request->validated());
 
         return $this->sendResponse($studentAccount, "", 201);
     }
