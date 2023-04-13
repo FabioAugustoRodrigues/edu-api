@@ -4,8 +4,8 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\API\BaseController;
 use App\Http\Requests\Student\CreateStudentRequest;
+use App\Http\Resources\Student\StudentResource;
 use App\Services\Student\CreateStudentAccountService;
-use Illuminate\Http\Request;
 
 class StudentController extends BaseController
 {
@@ -21,6 +21,6 @@ class StudentController extends BaseController
     {
         $studentAccount = $this->createStudentAccountService->execute($request->validated());
 
-        return $this->sendResponse($studentAccount, "", 201);
+        return $this->sendResponse(new StudentResource($studentAccount), "", 201);
     }
 }
