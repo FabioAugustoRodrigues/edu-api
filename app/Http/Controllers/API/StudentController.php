@@ -21,8 +21,7 @@ class StudentController extends BaseController
         $studentArray = [
             "name" => $request->name,
             "email" => $request->email,
-            "password" => $request->password,
-            "sn" => $request->sn
+            "password" => $request->password
         ];
         $studentAccount = $this->createStudentAccountService->execute($studentArray);
 

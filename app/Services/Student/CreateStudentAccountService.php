@@ -4,6 +4,7 @@ namespace App\Services\Student;
 
 use App\Exceptions\DomainException;
 use App\Repositories\StudentRepository;
+use App\Utils\SnGeneratorUtil;
 use Illuminate\Support\Facades\Hash;
 
 class CreateStudentAccountService
@@ -24,6 +25,8 @@ class CreateStudentAccountService
         }
 
         $data['password'] = Hash::make($data['password']);
+        $data['sn'] = SnGeneratorUtil::generate();
+
         $student = $this->studentRepository->create($data);
 
         return $student;
