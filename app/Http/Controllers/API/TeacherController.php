@@ -4,16 +4,20 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\API\BaseController;
 use App\Services\Teacher\CreateTeacherAccountService;
+use App\Services\Teacher\LoginTeacherService;
 use Illuminate\Http\Request;
 
 class TeacherController extends BaseController
 {
-    protected $creeateTeacherAccountService;
+    protected $createTeacherAccountService;
+    protected $loginTeacherService;
 
     public function __construct(
-        CreateTeacherAccountService $creeateTeacherAccountService
+        CreateTeacherAccountService $createTeacherAccountService,
+        LoginTeacherService $loginTeacherService
     ) {
-        $this->creeateTeacherAccountService = $creeateTeacherAccountService;
+        $this->createTeacherAccountService = $createTeacherAccountService;
+        $this->loginTeacherService = $loginTeacherService;
     }
 
     public function store(Request $request)
@@ -25,8 +29,18 @@ class TeacherController extends BaseController
             'bio' => $request->bio
         ];
 
-        $teacherAccount = $this->creeateTeacherAccountService->execute($teacherArray);
+        $teacherAccount = $this->createTeacherAccountService->execute($teacherArray);
 
         return $this->sendResponse($teacherAccount, "", 201);
+    }
+
+    public function login(Request $request)
+    {
+        return $this->sendResponse($this->loginTeacherService->execute($request->email, $request->password), "", 200);
+    }
+
+    public function me(Request $request)
+    {
+        return $this->sendResponse($request->user(), "", 200);
     }
 }

@@ -24,3 +24,5 @@ Route::get('/students/me', [StudentController::class, 'me'])->middleware(['auth:
 
 // TEACHERS
 Route::post('/teachers/register', [TeacherController::class, 'store']);
+Route::post('/teachers/login', [TeacherController::class, 'login']);
+Route::get('/teachers/me', [TeacherController::class, 'me'])->middleware(['auth:sanctum', 'type.teacher']);
