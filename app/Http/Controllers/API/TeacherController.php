@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\API\BaseController;
+use App\Http\Requests\Teacher\CreateTeacherRequest;
 use App\Http\Resources\Teacher\TeacherResource;
 use App\Services\Teacher\CreateTeacherAccountService;
 use App\Services\Teacher\LoginTeacherService;
@@ -21,16 +22,9 @@ class TeacherController extends BaseController
         $this->loginTeacherService = $loginTeacherService;
     }
 
-    public function store(Request $request)
+    public function store(CreateTeacherRequest $request)
     {
-        $teacherArray = [
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => $request->password,
-            'bio' => $request->bio
-        ];
-
-        $teacherAccount = $this->createTeacherAccountService->execute($teacherArray);
+        $teacherAccount = $this->createTeacherAccountService->execute($request->validated());
 
         return $this->sendResponse(new TeacherResource($teacherAccount), "", 201);
     }
