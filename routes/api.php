@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\API\StudentController;
+use App\Http\Controllers\API\TeacherController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -18,3 +19,8 @@ use Illuminate\Support\Facades\Route;
 Route::post('/students/register', [StudentController::class, 'store']);
 Route::post('/students/login', [StudentController::class, 'login']);
 Route::get('/students/me', [StudentController::class, 'me'])->middleware(['auth:sanctum', 'type.student']);
+
+
+
+// TEACHERS
+Route::post('/teachers/register', [TeacherController::class, 'store']);
