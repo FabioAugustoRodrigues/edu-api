@@ -21,6 +21,11 @@ class CreateCoursesTable extends Migration
             $table->enum('status', ['active', 'inactive']);
             $table->timestamp('start_date')->nullable();
             $table->timestamps();
+
+            $table->foreign('teacher_id')
+                ->references('id')
+                ->on('teachers')
+                ->onDelete('cascade');
         });
     }
 
