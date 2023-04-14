@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\API\BaseController;
+use App\Http\Resources\Teacher\TeacherResource;
 use App\Services\Teacher\CreateTeacherAccountService;
 use App\Services\Teacher\LoginTeacherService;
 use Illuminate\Http\Request;
@@ -31,7 +32,7 @@ class TeacherController extends BaseController
 
         $teacherAccount = $this->createTeacherAccountService->execute($teacherArray);
 
-        return $this->sendResponse($teacherAccount, "", 201);
+        return $this->sendResponse(new TeacherResource($teacherAccount), "", 201);
     }
 
     public function login(Request $request)
