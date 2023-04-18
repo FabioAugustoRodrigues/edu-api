@@ -24,11 +24,12 @@ class CreateCourseService
             throw new DomainException(['Teacher not found'], 404);
         }
 
-        $data['teacher_id'] = $teacher_id;
-
         if ($data['start_date'] < date('Y-m-d')) {
             throw new DomainException(['Invalid start date. Please provide a date equal to or after the current date.'], 400);
         }
+
+        $data['teacher_id'] = $teacher_id;
+        $data['status'] = 'inactive';
 
         $course = $this->courseRepository->create($data);
 
