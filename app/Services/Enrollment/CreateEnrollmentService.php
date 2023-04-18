@@ -34,6 +34,10 @@ class CreateEnrollmentService
             throw new DomainException(['Course not found'], 404);
         }
 
+        if ($this->enrollmentRepository->getByStudentAndCourse($student_id, $course_id) != null) {
+            throw new DomainException(['You are already enrolled in this course'], 400);
+        }
+
         if ($existingCourse->status == "inactive") {
             throw new DomainException(['Course is inactive'], 400);
         }

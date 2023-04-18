@@ -42,4 +42,9 @@ class EnrollmentRepository
 
         return $record->delete();
     }
+
+    public function getByStudentAndCourse(int $student_id, int $course_id)
+    {
+        return $this->model->where('student_id', $student_id)->where('course_id', $course_id)->first();
+    }
 }
