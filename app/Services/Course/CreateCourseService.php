@@ -17,12 +17,14 @@ class CreateCourseService
         $this->teacherRepository = $teacherRepository;
     }
 
-    public function execute(array $data)
+    public function execute(array $data, int $teacher_id)
     {
-        $existingTeacher = $this->teacherRepository->getById($data['teacher_id']);
+        $existingTeacher = $this->teacherRepository->getById($teacher_id);
         if (!$existingTeacher) {
             throw new DomainException(['Teacher not found'], 404);
         }
+
+        $data['teacher_id'] = $teacher_id;
 
         if ($data['start_date'] < date('Y-m-d')) {
             throw new DomainException(['Invalid start date. Please provide a date equal to or after the current date.'], 400);

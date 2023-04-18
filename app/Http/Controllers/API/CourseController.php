@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\API\BaseController;
+use App\Http\Requests\Course\CreateCourseRequest;
 use App\Services\Course\CreateCourseService;
 use Illuminate\Http\Request;
 
@@ -16,16 +17,9 @@ class CourseController extends BaseController
         $this->createCourseService = $createCourseService;
     }
 
-    public function store(Request $request)
+    public function store(CreateCourseRequest $request)
     {
-        $courseArray = [
-            'teacher_id' => $request->user()->id,
-            'name' => $request->name,
-            'description' => $request->description,
-            'start_date' => $request->start_date
-        ];
-
-        $course = $this->createCourseService->execute($courseArray);
+        $course = $this->createCourseService->execute($request->validated(), $request->user()->id);
 
         return $this->sendResponse($course, "", 201);
     }
