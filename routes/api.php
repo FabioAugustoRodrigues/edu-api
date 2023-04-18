@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\API\CourseController;
+use App\Http\Controllers\API\EnrollmentController;
 use App\Http\Controllers\API\StudentController;
 use App\Http\Controllers\API\TeacherController;
 use Illuminate\Support\Facades\Route;
@@ -34,3 +35,8 @@ Route::get('/teachers/{id}/courses', [CourseController::class, 'getCoursesByTeac
 // COURSES
 Route::post('/courses/register', [CourseController::class, 'store'])->middleware(['auth:sanctum', 'type.teacher']);
 Route::get('/courses', [CourseController::class, 'getAll']);
+
+
+
+// ENROLLMENTS
+Route::post('/enrollments/register', [EnrollmentController::class, 'store'])->middleware(['auth:sanctum', 'type.student']);
