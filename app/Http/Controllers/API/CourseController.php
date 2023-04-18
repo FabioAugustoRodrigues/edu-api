@@ -19,7 +19,7 @@ class CourseController extends BaseController
     public function store(Request $request)
     {
         $courseArray = [
-            'teacher_id' => $request->teacher_id,
+            'teacher_id' => $request->user()->id,
             'name' => $request->name,
             'description' => $request->description,
             'start_date' => $request->start_date

@@ -31,4 +31,4 @@ Route::get('/teachers/me', [TeacherController::class, 'me'])->middleware(['auth:
 
 
 // COURSES
-Route::post('/courses/register', [CourseController::class, 'store']);
+Route::post('/courses/register', [CourseController::class, 'store'])->middleware(['auth:sanctum', 'type.teacher']);
