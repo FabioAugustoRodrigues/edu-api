@@ -21,6 +21,7 @@ use Illuminate\Support\Facades\Route;
 Route::post('/students/register', [StudentController::class, 'store']);
 Route::post('/students/login', [StudentController::class, 'login']);
 Route::get('/students/me', [StudentController::class, 'me'])->middleware(['auth:sanctum', 'type.student']);
+Route::get('/students/{id}/enrollments', [EnrollmentController::class, 'getByStudent']);
 
 
 

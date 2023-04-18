@@ -22,7 +22,7 @@ class EnrollmentRepository
     {
         return $this->model->find($id);
     }
-    
+
     public function create(array $data)
     {
         return $this->model->create($data);
@@ -46,5 +46,10 @@ class EnrollmentRepository
     public function getByStudentAndCourse(int $student_id, int $course_id)
     {
         return $this->model->where('student_id', $student_id)->where('course_id', $course_id)->first();
+    }
+
+    public function getByStudent(int $student_id)
+    {
+        return $this->model->where('student_id', $student_id)->get();
     }
 }
