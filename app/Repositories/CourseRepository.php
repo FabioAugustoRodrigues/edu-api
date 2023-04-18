@@ -23,6 +23,11 @@ class CourseRepository
         return $this->model->find($id);
     }
 
+    public function getByTeacher(int $teacher_id)
+    {
+        return $this->model->where('teacher_id', $teacher_id)->get();
+    }
+
     public function create(array $data)
     {
         return $this->model->create($data);
