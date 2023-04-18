@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\API\BaseController;
 use App\Http\Requests\Course\CreateCourseRequest;
+use App\Http\Resources\Course\CourseResource;
 use App\Services\Course\CreateCourseService;
 use Illuminate\Http\Request;
 
@@ -21,6 +22,6 @@ class CourseController extends BaseController
     {
         $course = $this->createCourseService->execute($request->validated(), $request->user()->id);
 
-        return $this->sendResponse($course, "", 201);
+        return $this->sendResponse(new CourseResource($course), "", 201);
     }
 }
