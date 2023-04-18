@@ -33,3 +33,4 @@ Route::get('/teachers/{id}/courses', [CourseController::class, 'getCoursesByTeac
 
 // COURSES
 Route::post('/courses/register', [CourseController::class, 'store'])->middleware(['auth:sanctum', 'type.teacher']);
+Route::get('/courses', [CourseController::class, 'getAll']);
