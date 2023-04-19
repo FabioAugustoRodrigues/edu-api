@@ -52,4 +52,9 @@ class EnrollmentRepository
     {
         return $this->model->where('student_id', $student_id)->get();
     }
+
+    public function getByCourse(int $course_id)
+    {
+        return $this->model->where('course_id', $course_id)->get();
+    }
 }
