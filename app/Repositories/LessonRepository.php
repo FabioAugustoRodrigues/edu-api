@@ -23,6 +23,11 @@ class LessonRepository
         return $this->model->find($id);
     }
 
+    public function getByCourseAndOrder($course_id, $lesson_order)
+    {
+        return $this->model->where('course_id', $course_id)->where('lesson_order', $lesson_order)->first();
+    }
+
     public function create(array $data)
     {
         return $this->model->create($data);

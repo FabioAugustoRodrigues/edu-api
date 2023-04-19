@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\API\CourseController;
 use App\Http\Controllers\API\EnrollmentController;
+use App\Http\Controllers\API\LessonController;
 use App\Http\Controllers\API\StudentController;
 use App\Http\Controllers\API\TeacherController;
 use Illuminate\Support\Facades\Route;
@@ -43,6 +44,8 @@ Route::get('/courses', [CourseController::class, 'getAll']);
 Route::get('/courses/{id}', [CourseController::class, 'getById']);
 Route::put('/courses/{id}', [CourseController::class, 'update'])->middleware(['auth:sanctum', 'type.teacher']);
 Route::get('/courses/{id}/enrollments', [EnrollmentController::class, 'getByCourse'])->middleware(['auth:sanctum', 'type.teacher']);
+
+Route::post('/courses/{id}/lessons/register', [LessonController::class, 'store'])->middleware(['auth:sanctum', 'type.teacher']);
 
 
 

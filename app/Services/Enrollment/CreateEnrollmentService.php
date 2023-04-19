@@ -46,8 +46,6 @@ class CreateEnrollmentService
         $data['course_id'] = $course_id;
         $data['status'] = 'in_progress';
 
-        $enrollmentRepository = $this->enrollmentRepository->create($data);
-
-        return $enrollmentRepository;
+        return $this->enrollmentRepository->create($data);
     }
 }
