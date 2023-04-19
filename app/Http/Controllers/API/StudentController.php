@@ -4,22 +4,27 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\API\BaseController;
 use App\Http\Requests\Student\CreateStudentRequest;
+use App\Http\Requests\Student\UpdateStudentRequest;
 use App\Http\Resources\Student\StudentResource;
 use App\Services\Student\CreateStudentAccountService;
 use App\Services\Student\LoginStudentService;
+use App\Services\Student\UpdateStudentService;
 use Illuminate\Http\Request;
 
 class StudentController extends BaseController
 {
     protected $createStudentAccountService;
     protected $loginStudentService;
+    protected $updateStudentService;
 
     public function __construct(
         CreateStudentAccountService $createStudentAccountService,
-        LoginStudentService $loginStudentService
+        LoginStudentService $loginStudentService,
+        UpdateStudentService $updateStudentService
     ) {
         $this->createStudentAccountService = $createStudentAccountService;
         $this->loginStudentService = $loginStudentService;
+        $this->updateStudentService = $updateStudentService;
     }
 
     public function store(CreateStudentRequest $request)
@@ -37,5 +42,10 @@ class StudentController extends BaseController
     public function me(Request $request)
     {
         return $this->sendResponse($request->user(), "", 200);
+    }
+
+    public function updateAuthenticatedStudent(UpdateStudentRequest $request)
+    {
+        return $this->sendResponse($this->updateStudentService->execute($request->validated(), $request->user()->id), "", 200);
     }
 }
