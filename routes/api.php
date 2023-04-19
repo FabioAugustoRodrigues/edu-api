@@ -31,6 +31,7 @@ Route::get('/students/{id}/enrollments', [EnrollmentController::class, 'getByStu
 Route::post('/teachers/register', [TeacherController::class, 'store']);
 Route::post('/teachers/login', [TeacherController::class, 'login']);
 Route::get('/teachers/me', [TeacherController::class, 'me'])->middleware(['auth:sanctum', 'type.teacher']);
+Route::put('/teachers/me', [TeacherController::class, 'updateAuthenticatedTeacher'])->middleware(['auth:sanctum', 'type.teacher']);
 Route::get('/teachers/{id}/courses', [CourseController::class, 'getCoursesByTeacher']);
 
 
