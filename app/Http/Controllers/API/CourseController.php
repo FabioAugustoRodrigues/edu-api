@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Helpers\Authorization\CourseAuthorization;
 use App\Http\Controllers\API\BaseController;
 use App\Http\Requests\Course\CreateCourseRequest;
 use App\Http\Requests\Course\UpdateCourseRequest;
@@ -13,6 +12,7 @@ use App\Services\Course\GetAllCoursesService;
 use App\Services\Course\GetCourseByIdService;
 use App\Services\Course\GetCoursesByTeacherService;
 use App\Services\Course\UpdateCourseService;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Http\Request;
 
 class CourseController extends BaseController
@@ -61,8 +61,9 @@ class CourseController extends BaseController
 
     public function update(UpdateCourseRequest $request, $id)
     {
-        $authorization = new CourseAuthorization();
-        $authorization->validateOwnership($request->user()->id, $id);
+        if (Gate::denies('teacher-update-post', $id)) {
+            $this->sendResponse(['Teacher does not own the course'], 403);
+        }
 
         return $this->sendResponse(new CourseResource($this->updateCourseService->execute($request->validated(), $id)), 200);
     }

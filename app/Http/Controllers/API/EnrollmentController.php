@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Helpers\Authorization\CourseAuthorization;
 use App\Http\Controllers\API\BaseController;
 use App\Services\Enrollment\CreateEnrollmentService;
 use App\Services\Enrollment\GetEnrollmentsByCourseService;
 use App\Services\Enrollment\GetEnrollmentsByStudentService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class EnrollmentController extends BaseController
 {
@@ -40,8 +40,9 @@ class EnrollmentController extends BaseController
 
     public function getByCourse(Request $request, $course_id)
     {
-        $authorization = new CourseAuthorization();
-        $authorization->validateOwnership($request->user()->id, $course_id);
+        if (Gate::denies('teacher-view-course-enrollments', $course_id)) {
+            $this->sendResponse(['Teacher does not own the course'], 403);
+        }
 
         return $this->sendResponse($this->getEnrollmentsByCourseService->execute($course_id), "", 200);
     }

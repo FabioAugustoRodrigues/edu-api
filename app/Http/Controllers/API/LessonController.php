@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Helpers\Authorization\CourseAuthorization;
 use App\Http\Controllers\API\BaseController;
 use App\Services\Lesson\CreateLessonService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class LessonController extends BaseController
 {
@@ -19,8 +19,9 @@ class LessonController extends BaseController
 
     public function store(Request $request, $course_id)
     {
-        $authorization = new CourseAuthorization();
-        $authorization->validateOwnership($request->user()->id, $course_id);
+        if (Gate::denies('teacher-store-course-lessons', $course_id)) {
+            $this->sendResponse(['Teacher does not own the course'], 403);
+        }
 
         $lessonArray = [
             'name' => $request->name,
