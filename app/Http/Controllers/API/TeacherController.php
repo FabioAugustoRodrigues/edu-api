@@ -7,6 +7,7 @@ use App\Http\Requests\Teacher\CreateTeacherRequest;
 use App\Http\Requests\Teacher\UpdateTeacherRequest;
 use App\Http\Resources\Teacher\TeacherResource;
 use App\Services\Teacher\CreateTeacherAccountService;
+use App\Services\Teacher\DeleteTeacherByIdService;
 use App\Services\Teacher\LoginTeacherService;
 use App\Services\Teacher\UpdateTeacherService;
 use Illuminate\Http\Request;
@@ -16,15 +17,18 @@ class TeacherController extends BaseController
     protected $createTeacherAccountService;
     protected $loginTeacherService;
     protected $updateTeacherService;
+    protected $deleteTeacherByIdService;
 
     public function __construct(
         CreateTeacherAccountService $createTeacherAccountService,
         LoginTeacherService $loginTeacherService,
-        UpdateTeacherService $updateTeacherService
+        UpdateTeacherService $updateTeacherService,
+        DeleteTeacherByIdService $deleteTeacherByIdService
     ) {
         $this->createTeacherAccountService = $createTeacherAccountService;
         $this->loginTeacherService = $loginTeacherService;
         $this->updateTeacherService = $updateTeacherService;
+        $this->deleteTeacherByIdService = $deleteTeacherByIdService;
     }
 
     public function store(CreateTeacherRequest $request)
@@ -47,5 +51,10 @@ class TeacherController extends BaseController
     public function updateAuthenticatedTeacher(UpdateTeacherRequest $request)
     {
         return $this->sendResponse($this->updateTeacherService->execute($request->validated(), $request->user()->id), "", 200);
+    }
+
+    public function deleteAuthenticatedTeacher(Request $request)
+    {
+        return $this->sendResponse($this->deleteTeacherByIdService->execute($request->user()->id), "", 200);
     }
 }
