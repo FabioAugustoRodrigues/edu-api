@@ -7,6 +7,7 @@ use App\Http\Requests\Student\CreateStudentRequest;
 use App\Http\Requests\Student\UpdateStudentRequest;
 use App\Http\Resources\Student\StudentResource;
 use App\Services\Student\CreateStudentAccountService;
+use App\Services\Student\DeleteStudentByIdService;
 use App\Services\Student\LoginStudentService;
 use App\Services\Student\UpdateStudentService;
 use Illuminate\Http\Request;
@@ -16,15 +17,18 @@ class StudentController extends BaseController
     protected $createStudentAccountService;
     protected $loginStudentService;
     protected $updateStudentService;
+    protected $deleteStudentByIdService;
 
     public function __construct(
         CreateStudentAccountService $createStudentAccountService,
         LoginStudentService $loginStudentService,
-        UpdateStudentService $updateStudentService
+        UpdateStudentService $updateStudentService,
+        DeleteStudentByIdService $deleteStudentByIdService
     ) {
         $this->createStudentAccountService = $createStudentAccountService;
         $this->loginStudentService = $loginStudentService;
         $this->updateStudentService = $updateStudentService;
+        $this->deleteStudentByIdService = $deleteStudentByIdService;
     }
 
     public function store(CreateStudentRequest $request)
@@ -47,5 +51,10 @@ class StudentController extends BaseController
     public function updateAuthenticatedStudent(UpdateStudentRequest $request)
     {
         return $this->sendResponse($this->updateStudentService->execute($request->validated(), $request->user()->id), "", 200);
+    }
+
+    public function deleteAuthenticatedStudent(Request $request)
+    {
+        return $this->sendResponse($this->deleteStudentByIdService->execute($request->user()->id), "", 200);
     }
 }
