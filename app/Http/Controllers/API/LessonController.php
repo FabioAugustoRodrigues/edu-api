@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\API\BaseController;
+use App\Http\Requests\Lesson\CreateLessonRequest;
 use App\Http\Resources\Lesson\LessonCollection;
 use App\Http\Resources\Lesson\LessonResource;
 use App\Services\Lesson\CreateLessonService;
@@ -31,18 +32,13 @@ class LessonController extends BaseController
         $this->updateLessonOrdersService = $updateLessonOrdersService;
     }
 
-    public function store(Request $request, $course_id)
+    public function store(CreateLessonRequest $request, $course_id)
     {
         if (Gate::denies('teacher-store-course-lessons', $course_id)) {
             $this->sendResponse(['Teacher does not own the course'], 403);
         }
 
-        $lessonArray = [
-            'name' => $request->name,
-            'lesson_order' => $request->lesson_order
-        ];
-
-        return $this->sendResponse(new LessonResource($this->createLessonService->execute($lessonArray, $course_id)), "", 201);
+        return $this->sendResponse(new LessonResource($this->createLessonService->execute($request->validated(), $course_id)), "", 201);
     }
 
     public function getLessonsByCourse(Request $request, $course_id)
