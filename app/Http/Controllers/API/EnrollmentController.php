@@ -43,7 +43,7 @@ class EnrollmentController extends BaseController
     public function getByCourse(Request $request, $course_id)
     {
         if (Gate::denies('teacher-view-course-enrollments', $course_id)) {
-            $this->sendResponse(['Teacher does not own the course'], 403);
+            return $this->sendResponse(['Teacher does not own the course'], 403);
         }
 
         return $this->sendResponse(new EnrollmentCollection($this->getEnrollmentsByCourseService->execute($course_id)), "", 200);
