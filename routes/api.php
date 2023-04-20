@@ -43,9 +43,11 @@ Route::post('/courses/register', [CourseController::class, 'store'])->middleware
 Route::get('/courses', [CourseController::class, 'getAll']);
 Route::get('/courses/{id}', [CourseController::class, 'getById']);
 Route::put('/courses/{id}', [CourseController::class, 'update'])->middleware(['auth:sanctum', 'type.teacher']);
+
 Route::get('/courses/{id}/enrollments', [EnrollmentController::class, 'getByCourse'])->middleware(['auth:sanctum', 'type.teacher']);
 
 Route::post('/courses/{id}/lessons/register', [LessonController::class, 'store'])->middleware(['auth:sanctum', 'type.teacher']);
+Route::patch('/courses/{id}/lessons/{lesson_id}/name/{name}', [LessonController::class, 'updateName'])->middleware(['auth:sanctum', 'type.teacher']);
 Route::get('/courses/{id}/lessons', [LessonController::class, 'getLessonsByCourse']);
 
 

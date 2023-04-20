@@ -43,5 +43,14 @@ class GateDefinitions
 
             return $teacher->id === $course->teacher_id;
         });
+
+        Gate::define('teacher-update-lesson-name', function (Teacher $teacher, $course_id) {
+            $course = Course::find($course_id);
+            if ($course == NULL) {
+                throw new DomainException(["Course not found"], 404);
+            }
+
+            return $teacher->id === $course->teacher_id;
+        });
     }
 }
