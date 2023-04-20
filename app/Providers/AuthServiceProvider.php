@@ -29,5 +29,6 @@ class AuthServiceProvider extends ServiceProvider
         GateDefinitions::defineCourseGates();
         GateDefinitions::defineEnrollmentGates();
         GateDefinitions::defineLessonGates();
+        GateDefinitions::defineContentGates();
     }
 }

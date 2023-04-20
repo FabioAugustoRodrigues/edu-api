@@ -74,4 +74,25 @@ class GateDefinitions
             return true;
         });
     }
+
+    public static function defineContentGates()
+    {
+        Gate::define('teacher-store-content-lessons', function (Teacher $teacher, $course_id, $lesson_id) {
+            $course = Course::find($course_id);
+            if ($course == NULL) {
+                throw new DomainException(["Course not found"], 404);
+            }
+
+            if ($teacher->id != $course->teacher_id) {
+                return false;
+            }
+
+            $lesson = Lesson::find($lesson_id);
+            if ($lesson->course_id != $course->id) {
+                return false;
+            }
+
+            return true;
+        });
+    }
 }

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\API\ContentController;
 use App\Http\Controllers\API\CourseController;
 use App\Http\Controllers\API\EnrollmentController;
 use App\Http\Controllers\API\LessonController;
@@ -50,6 +51,8 @@ Route::post('/courses/{id}/lessons/register', [LessonController::class, 'store']
 Route::patch('/courses/{id}/lessons/{lesson_id}/name/{name}', [LessonController::class, 'updateName'])->middleware(['auth:sanctum', 'type.teacher']);
 Route::put('/courses/{id}/lessons/orders', [LessonController::class, 'updateOrders'])->middleware(['auth:sanctum', 'type.teacher']);
 Route::get('/courses/{id}/lessons', [LessonController::class, 'getLessonsByCourse']);
+
+Route::post('/courses/{id}/lessons/{lesson_id}/contents/register', [ContentController::class, 'store'])->middleware(['auth:sanctum', 'type.teacher']);
 
 
 
