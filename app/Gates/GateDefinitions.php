@@ -4,6 +4,7 @@ namespace App\Gates;
 
 use App\Exceptions\DomainException;
 use App\Models\Course;
+use App\Models\Lesson;
 use App\Models\Teacher;
 use Illuminate\Support\Facades\Gate;
 
@@ -51,6 +52,26 @@ class GateDefinitions
             }
 
             return $teacher->id === $course->teacher_id;
+        });
+
+        Gate::define('teacher-update-lesson-orders', function (Teacher $teacher, $course_id, $lesson_ids) {
+            $course = Course::find($course_id);
+            if ($course == NULL) {
+                throw new DomainException(["Course not found"], 404);
+            }
+
+            if ($teacher->id != $course->teacher_id) {
+                return false;
+            }
+
+            foreach ($lesson_ids as $lesson) {
+                $lessonFound = Lesson::find($lesson["lesson_id"]);
+                if ($lessonFound == NULL || $lessonFound->course_id != $course_id) {
+                    return false;
+                }
+            }
+
+            return true;
         });
     }
 }

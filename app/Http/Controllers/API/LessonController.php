@@ -6,6 +6,7 @@ use App\Http\Controllers\API\BaseController;
 use App\Services\Lesson\CreateLessonService;
 use App\Services\Lesson\GetLessonsByCourseService;
 use App\Services\Lesson\UpdateLessonNameService;
+use App\Services\Lesson\UpdateLessonOrdersService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 
@@ -14,15 +15,18 @@ class LessonController extends BaseController
     protected $createLessonService;
     protected $getLessonsByCourseService;
     protected $updateLessonNameService;
+    protected $updateLessonOrdersService;
 
     public function __construct(
         CreateLessonService $createLessonService,
         GetLessonsByCourseService $getLessonsByCourseService,
-        UpdateLessonNameService $updateLessonNameService
+        UpdateLessonNameService $updateLessonNameService,
+        UpdateLessonOrdersService $updateLessonOrdersService
     ) {
         $this->createLessonService = $createLessonService;
         $this->getLessonsByCourseService = $getLessonsByCourseService;
         $this->updateLessonNameService = $updateLessonNameService;
+        $this->updateLessonOrdersService = $updateLessonOrdersService;
     }
 
     public function store(Request $request, $course_id)
@@ -49,11 +53,22 @@ class LessonController extends BaseController
         if (empty($name) || strlen($name) > 255) {
             return $this->sendResponse(null, 'Invalid name.', 400);
         }
-        
+
         if (Gate::denies('teacher-update-lesson-name', $course_id)) {
             return $this->sendResponse(null, 'Teacher does not own the course', 403);
         }
 
         return $this->sendResponse($this->updateLessonNameService->execute($lesson_id, $name), "", 200);
+    }
+
+    public function updateOrders(Request $request, $course_id)
+    {
+        $lesson_orders = $request->input("lesson_orders");
+
+        if (Gate::denies('teacher-update-lesson-orders', [$course_id, $lesson_orders])) {
+            return $this->sendResponse(null, 'Teacher does not own the course', 403);
+        }
+
+        return $this->sendResponse($this->updateLessonOrdersService->execute($lesson_orders), "", 200);
     }
 }
