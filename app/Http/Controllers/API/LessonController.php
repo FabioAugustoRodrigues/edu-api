@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\API\BaseController;
+use App\Http\Resources\Lesson\LessonCollection;
+use App\Http\Resources\Lesson\LessonResource;
 use App\Services\Lesson\CreateLessonService;
 use App\Services\Lesson\GetLessonsByCourseService;
 use App\Services\Lesson\UpdateLessonNameService;
@@ -40,12 +42,12 @@ class LessonController extends BaseController
             'lesson_order' => $request->lesson_order
         ];
 
-        return $this->sendResponse($this->createLessonService->execute($lessonArray, $course_id), "", 201);
+        return $this->sendResponse(new LessonResource($this->createLessonService->execute($lessonArray, $course_id)), "", 201);
     }
 
     public function getLessonsByCourse(Request $request, $course_id)
     {
-        return $this->sendResponse($this->getLessonsByCourseService->execute($course_id), "", 200);
+        return $this->sendResponse(new LessonCollection($this->getLessonsByCourseService->execute($course_id)), "", 200);
     }
 
     public function updateName(Request $request, $course_id, $lesson_id, $name)
