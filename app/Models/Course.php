@@ -23,4 +23,16 @@ class Course extends Authenticatable
         'password',
         'remember_token',
     ];
+
+    public function enrollments()
+    {
+        return $this->hasMany(Enrollment::class);
+    }
+
+    public function enrolledIn(Student $student): bool
+    {
+        return $this->enrollments()
+            ->where('student_id', $student->id)
+            ->exists();
+    }
 }

@@ -2,13 +2,13 @@
 
 namespace App\Policies;
 
+use App\Interfaces\UserInterface;
 use App\Models\Course;
-use App\Models\Teacher;
 
 class EnrollmentPolicy
 {
-    public function view(Teacher $teacher, Course $course)
+    public function view(UserInterface $user, Course $course)
     {
-        return $teacher->id === $course->teacher_id;
+        return $user->isTeacher() && $user->id === $course->teacher_id;
     }
 }

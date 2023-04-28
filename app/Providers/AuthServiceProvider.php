@@ -30,19 +30,19 @@ class AuthServiceProvider extends ServiceProvider
         $this->registerPolicies();
 
         // COURSE POLICY
-        Gate::define("teacher-update-course", [CoursePolicy::class, "update"]);
+        Gate::define("user-update-course", [CoursePolicy::class, "update"]);
        
         // LESSON POLICY
-        Gate::define('teacher-store-course-lessons', [LessonPolicy::class, 'store']);
-        Gate::define('teacher-update-lesson-name', [LessonPolicy::class, 'updateName']);
-        Gate::define('teacher-update-lesson-orders', [LessonPolicy::class, 'updateOrder']);
+        Gate::define('user-store-course-lessons', [LessonPolicy::class, 'store']);
+        Gate::define('user-update-lesson-name', [LessonPolicy::class, 'updateName']);
+        Gate::define('user-update-lesson-orders', [LessonPolicy::class, 'updateOrder']);
 
         // CONTENT POLICY
-        Gate::define('teacher-store-lesson-contents', [ContentPolicy::class, 'store']);
-        Gate::define('teacher-update-lesson-contents', [ContentPolicy::class, 'update']);
-        Gate::define('teacher-view-all-lesson-contents', [ContentPolicy::class, 'viewAll']);
+        Gate::define('user-store-lesson-contents', [ContentPolicy::class, 'store']);
+        Gate::define('user-update-lesson-contents', [ContentPolicy::class, 'update']);
+        Gate::define('user-view-all-lesson-contents', [ContentPolicy::class, 'viewAll']);
 
         // ENROLLMENT POLICY
-        Gate::define("teacher-view-course-enrollments", [EnrollmentPolicy::class, "view"]);
+        Gate::define("user-view-course-enrollments", [EnrollmentPolicy::class, "view"]);
     }
 }

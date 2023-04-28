@@ -2,25 +2,25 @@
 
 namespace App\Policies;
 
+use App\Interfaces\UserInterface;
 use App\Models\Course;
 use App\Models\Lesson;
-use App\Models\Teacher;
 
 class LessonPolicy
 {
-    public function store(Teacher $teacher, Course $course)
+    public function store(UserInterface $user, Course $course)
     {
-        return $teacher->id === $course->teacher_id;
+        return $user->isTeacher() && $user->id === $course->teacher_id;
     }
 
-    public function updateName(Teacher $teacher, Course $course, Lesson $lesson)
+    public function updateName(UserInterface $user, Course $course, Lesson $lesson)
     {
-        return ($teacher->id === $course->teacher_id && $lesson->course_id === $course->id);
+        return ($user->isTeacher() && $user->id === $course->teacher_id && $lesson->course_id === $course->id);
     }
 
-    public function updateOrder(Teacher $teacher, Course $course, array $lessonIds)
+    public function updateOrder(UserInterface $user, Course $course, array $lessonIds)
     {
-        if ($teacher->id !== $course->teacher_id) {
+        if ($user->id !== $course->teacher_id || !$user->isTeacher()) {
             return false;
         }
 

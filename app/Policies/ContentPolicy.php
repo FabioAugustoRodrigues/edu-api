@@ -2,24 +2,46 @@
 
 namespace App\Policies;
 
+use App\Interfaces\UserInterface;
 use App\Models\Content;
 use App\Models\Course;
 use App\Models\Lesson;
-use App\Models\Teacher;
 
 class ContentPolicy
 {
-    public function store(Teacher $teacher, Course $course, Lesson $lesson)
+    public function store(UserInterface $user, Course $course, Lesson $lesson)
     {
-        return ($lesson->course_id === $course->id && $teacher->id === $course->teacher_id);
+        $lessonBelongsToCourse = $lesson->course_id === $course->id;
+
+        if ($user->isTeacher() && $lessonBelongsToCourse) {
+            return true;
+        }
     }
 
-    public function update(Teacher $teacher, Course $course, Lesson $lesson, Content $content)
+    public function update(UserInterface $user, Course $course, Lesson $lesson, Content $content)
     {
-        return ($lesson->course_id === $course->id && $teacher->id === $course->teacher_id && $content->lesson_id = $lesson->id);
+        $contentBelongsToLesson = $content->lesson_id === $content->id;
+        $lessonBelongsToCourse = $lesson->course_id === $course->id;
+
+        if ($user->isTeacher() && $user->id === $course->teacher_id && $contentBelongsToLesson && $lessonBelongsToCourse) {
+            return true;
+        }
+
+        return false;
     }
 
-    public function viewAll(Teacher $teacher, Course $course, Lesson $lesson) {
-        return ($lesson->course_id === $course->id && $teacher->id === $course->teacher_id);
+    public function viewAll(UserInterface $user, Course $course, Lesson $lesson)
+    {
+        $lessonBelongsToCourse = $lesson->course_id === $course->id;
+
+        if ($user->isTeacher() && $user->id === $course->teacher_id && $lessonBelongsToCourse) {
+            return true;
+        }
+
+        if ($user->isStudent() && $course->enrolledIn($user) && $lessonBelongsToCourse) {
+            return true;
+        }
+
+        return false;
     }
 }
