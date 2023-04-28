@@ -54,6 +54,7 @@ Route::get('/courses/{id}/lessons', [LessonController::class, 'getLessonsByCours
 
 Route::post('/courses/{id}/lessons/{lesson_id}/contents/register', [ContentController::class, 'store'])->middleware(['auth:sanctum', 'type.teacher']);
 Route::put('/courses/{id}/lessons/{lesson_id}/contents/{content_id}', [ContentController::class, 'update'])->middleware(['auth:sanctum', 'type.teacher']);
+Route::get('/courses/{id}/lessons/{lesson_id}/contents/', [ContentController::class, 'getByLesson'])->middleware(['auth:sanctum', 'type.teacher']);
 
 
 

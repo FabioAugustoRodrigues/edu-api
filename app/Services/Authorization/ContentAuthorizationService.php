@@ -40,4 +40,15 @@ class ContentAuthorizationService
 
         return true;
     }
+
+    public function viewAll(Teacher $teacher, $course_id, $lesson_id): bool
+    {
+        $course = $this->findCourseOrFail($course_id);
+        $lesson = $this->findLessonOrFail($lesson_id);
+        if (Gate::denies('teacher-view-all-lesson-contents', [$course, $lesson])) {
+            throw new DomainException(["Teacher does not own the course"], 403);
+        }
+
+        return true;
+    }
 }

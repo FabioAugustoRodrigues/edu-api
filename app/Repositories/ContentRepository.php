@@ -23,6 +23,11 @@ class ContentRepository
         return $this->model->find($id);
     }
 
+    public function getByLesson($lesson_id)
+    {
+        return $this->model->where("lesson_id", $lesson_id)->get();
+    }
+
     public function create(array $data)
     {
         return $this->model->create($data);

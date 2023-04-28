@@ -18,4 +18,8 @@ class ContentPolicy
     {
         return ($lesson->course_id === $course->id && $teacher->id === $course->teacher_id && $content->lesson_id = $lesson->id);
     }
+
+    public function viewAll(Teacher $teacher, Course $course, Lesson $lesson) {
+        return ($lesson->course_id === $course->id && $teacher->id === $course->teacher_id);
+    }
 }
