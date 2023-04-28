@@ -5,19 +5,12 @@ namespace App\Services\Authorization;
 use App\Exceptions\DomainException;
 use App\Models\Course;
 use App\Models\Teacher;
+use App\Services\Authorization\Traits\CourseFinder;
 use Illuminate\Support\Facades\Gate;
 
 class EnrollmentAuthorizationService
 {
-    private function findCourseOrFail($course_id): Course
-    {
-        $course = Course::find($course_id);
-        if (!$course) {
-            throw new DomainException(["Course not found"], 404);
-        }
-
-        return $course;
-    }
+    use CourseFinder;
 
     public function view(Teacher $teacher, $course_id): bool
     {

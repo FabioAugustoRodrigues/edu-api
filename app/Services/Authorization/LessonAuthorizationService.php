@@ -6,29 +6,14 @@ use App\Exceptions\DomainException;
 use App\Models\Course;
 use App\Models\Lesson;
 use App\Models\Teacher;
+use App\Services\Authorization\Traits\CourseFinder;
+use App\Services\Authorization\Traits\LessonFinder;
 use Illuminate\Support\Facades\Gate;
 
 class LessonAuthorizationService
 {
-    private function findCourseOrFail($course_id): Course
-    {
-        $course = Course::find($course_id);
-        if (!$course) {
-            throw new DomainException(["Course not found"], 404);
-        }
-
-        return $course;
-    }
-
-    private function findLessonOrFail($lesson_id): Lesson
-    {
-        $lesson = Lesson::find($lesson_id);
-        if (!$lesson) {
-            throw new DomainException(["Lesson not found"], 404);
-        }
-
-        return $lesson;
-    }
+    use CourseFinder;
+    use LessonFinder;
 
     public function store(Teacher $teacher, $course_id): bool
     {
