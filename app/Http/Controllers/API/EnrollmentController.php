@@ -5,11 +5,11 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\API\BaseController;
 use App\Http\Resources\Enrollment\EnrollmentCollection;
 use App\Http\Resources\Enrollment\EnrollmentResource;
+use App\Services\Authorization\EnrollmentAuthorizationService;
 use App\Services\Enrollment\CreateEnrollmentService;
 use App\Services\Enrollment\GetEnrollmentsByCourseService;
 use App\Services\Enrollment\GetEnrollmentsByStudentService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Gate;
 
 class EnrollmentController extends BaseController
 {
@@ -17,14 +17,18 @@ class EnrollmentController extends BaseController
     protected $getEnrollmentsByStudentService;
     protected $getEnrollmentsByCourseService;
 
+    protected $enrollmentAuthorizationService;
+
     public function __construct(
         CreateEnrollmentService $createEnrollmentService,
         GetEnrollmentsByStudentService $getEnrollmentsByStudentService,
-        GetEnrollmentsByCourseService $getEnrollmentsByCourseService
+        GetEnrollmentsByCourseService $getEnrollmentsByCourseService,
+        EnrollmentAuthorizationService $enrollmentAuthorizationService
     ) {
         $this->createEnrollmentService = $createEnrollmentService;
         $this->getEnrollmentsByStudentService = $getEnrollmentsByStudentService;
         $this->getEnrollmentsByCourseService = $getEnrollmentsByCourseService;
+        $this->enrollmentAuthorizationService = $enrollmentAuthorizationService;
     }
 
     public function store(Request $request)
@@ -42,9 +46,7 @@ class EnrollmentController extends BaseController
 
     public function getByCourse(Request $request, $course_id)
     {
-        if (Gate::denies('teacher-view-course-enrollments', $course_id)) {
-            return $this->sendResponse(['Teacher does not own the course'], 403);
-        }
+        $this->enrollmentAuthorizationService->view($request->user(), $course_id);
 
         return $this->sendResponse(new EnrollmentCollection($this->getEnrollmentsByCourseService->execute($course_id)), "", 200);
     }

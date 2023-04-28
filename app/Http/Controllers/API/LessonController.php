@@ -6,12 +6,12 @@ use App\Http\Controllers\API\BaseController;
 use App\Http\Requests\Lesson\CreateLessonRequest;
 use App\Http\Resources\Lesson\LessonCollection;
 use App\Http\Resources\Lesson\LessonResource;
+use App\Services\Authorization\LessonAuthorizationService;
 use App\Services\Lesson\CreateLessonService;
 use App\Services\Lesson\GetLessonsByCourseService;
 use App\Services\Lesson\UpdateLessonNameService;
 use App\Services\Lesson\UpdateLessonOrdersService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Gate;
 
 class LessonController extends BaseController
 {
@@ -20,23 +20,25 @@ class LessonController extends BaseController
     protected $updateLessonNameService;
     protected $updateLessonOrdersService;
 
+    protected $lessonAuthorizationService;
+
     public function __construct(
         CreateLessonService $createLessonService,
         GetLessonsByCourseService $getLessonsByCourseService,
         UpdateLessonNameService $updateLessonNameService,
-        UpdateLessonOrdersService $updateLessonOrdersService
+        UpdateLessonOrdersService $updateLessonOrdersService,
+        LessonAuthorizationService $lessonAuthorizationService
     ) {
         $this->createLessonService = $createLessonService;
         $this->getLessonsByCourseService = $getLessonsByCourseService;
         $this->updateLessonNameService = $updateLessonNameService;
         $this->updateLessonOrdersService = $updateLessonOrdersService;
+        $this->lessonAuthorizationService = $lessonAuthorizationService;
     }
 
     public function store(CreateLessonRequest $request, $course_id)
     {
-        if (Gate::denies('teacher-store-course-lessons', $course_id)) {
-            $this->sendResponse(['Teacher does not own the course'], 403);
-        }
+        $this->lessonAuthorizationService->store($request->user(), $course_id);
 
         return $this->sendResponse(new LessonResource($this->createLessonService->execute($request->validated(), $course_id)), "", 201);
     }
@@ -52,9 +54,7 @@ class LessonController extends BaseController
             return $this->sendResponse(null, 'Invalid name.', 400);
         }
 
-        if (Gate::denies('teacher-update-lesson-name', $course_id)) {
-            return $this->sendResponse(null, 'Teacher does not own the course', 403);
-        }
+        $this->lessonAuthorizationService->updateName($request->user(), $course_id, $lesson_id);
 
         return $this->sendResponse($this->updateLessonNameService->execute($lesson_id, $name), "", 200);
     }
@@ -63,9 +63,7 @@ class LessonController extends BaseController
     {
         $lesson_orders = $request->input("lesson_orders");
 
-        if (Gate::denies('teacher-update-lesson-orders', [$course_id, $lesson_orders])) {
-            return $this->sendResponse(null, 'Teacher does not own the course', 403);
-        }
+        $this->lessonAuthorizationService->updateOrders($request->user(), $course_id, $lesson_orders);
 
         return $this->sendResponse($this->updateLessonOrdersService->execute($lesson_orders), "", 200);
     }

@@ -2,7 +2,10 @@
 
 namespace App\Providers;
 
-use App\Gates\GateDefinitions;
+use App\Policies\ContentPolicy;
+use App\Policies\CoursePolicy;
+use App\Policies\EnrollmentPolicy;
+use App\Policies\LessonPolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
 
@@ -26,9 +29,18 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        GateDefinitions::defineCourseGates();
-        GateDefinitions::defineEnrollmentGates();
-        GateDefinitions::defineLessonGates();
-        GateDefinitions::defineContentGates();
+        // COURSE POLICY
+        Gate::define("teacher-update-course", [CoursePolicy::class, "update"]);
+       
+        // LESSON POLICY
+        Gate::define('teacher-store-course-lessons', [LessonPolicy::class, 'store']);
+        Gate::define('teacher-update-lesson-name', [LessonPolicy::class, 'updateName']);
+        Gate::define('teacher-update-lesson-orders', [LessonPolicy::class, 'updateOrder']);
+
+        // CONTENT POLICY
+        Gate::define('teacher-store-lesson-contents', [ContentPolicy::class, 'store']);
+
+        // ENROLLMENT POLICY
+        Gate::define("teacher-view-course-enrollments", [EnrollmentPolicy::class, "view"]);
     }
 }

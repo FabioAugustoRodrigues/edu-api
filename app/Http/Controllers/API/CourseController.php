@@ -7,12 +7,12 @@ use App\Http\Requests\Course\CreateCourseRequest;
 use App\Http\Requests\Course\UpdateCourseRequest;
 use App\Http\Resources\Course\CourseCollection;
 use App\Http\Resources\Course\CourseResource;
+use App\Services\Authorization\CourseAuthorizationService;
 use App\Services\Course\CreateCourseService;
 use App\Services\Course\GetAllCoursesService;
 use App\Services\Course\GetCourseByIdService;
 use App\Services\Course\GetCoursesByTeacherService;
 use App\Services\Course\UpdateCourseService;
-use Illuminate\Support\Facades\Gate;
 use Illuminate\Http\Request;
 
 class CourseController extends BaseController
@@ -23,18 +23,22 @@ class CourseController extends BaseController
     protected $getCourseByIdService;
     protected $updateCourseService;
 
+    protected $courseAuthorizationService;
+
     public function __construct(
         CreateCourseService $createCourseService,
         GetCoursesByTeacherService $getCoursesByTeacherService,
         GetAllCoursesService $getAllCoursesService,
         GetCourseByIdService $getCourseByIdService,
-        UpdateCourseService $updateCourseService
+        UpdateCourseService $updateCourseService,
+        CourseAuthorizationService $courseAuthorizationService
     ) {
         $this->createCourseService = $createCourseService;
         $this->getCoursesByTeacherService = $getCoursesByTeacherService;
         $this->getAllCoursesService = $getAllCoursesService;
         $this->getCourseByIdService = $getCourseByIdService;
         $this->updateCourseService = $updateCourseService;
+        $this->courseAuthorizationService = $courseAuthorizationService;
     }
 
     public function store(CreateCourseRequest $request)
@@ -61,9 +65,7 @@ class CourseController extends BaseController
 
     public function update(UpdateCourseRequest $request, $id)
     {
-        if (Gate::denies('teacher-update-post', $id)) {
-            $this->sendResponse(['Teacher does not own the course'], 403);
-        }
+        $this->courseAuthorizationService->update($request->user(), $id);
 
         return $this->sendResponse(new CourseResource($this->updateCourseService->execute($request->validated(), $id)), 200);
     }
