@@ -39,6 +39,7 @@ class AuthServiceProvider extends ServiceProvider
 
         // CONTENT POLICY
         Gate::define('teacher-store-lesson-contents', [ContentPolicy::class, 'store']);
+        Gate::define('teacher-update-lesson-contents', [ContentPolicy::class, 'update']);
 
         // ENROLLMENT POLICY
         Gate::define("teacher-view-course-enrollments", [EnrollmentPolicy::class, "view"]);

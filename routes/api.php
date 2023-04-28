@@ -53,6 +53,7 @@ Route::put('/courses/{id}/lessons/orders', [LessonController::class, 'updateOrde
 Route::get('/courses/{id}/lessons', [LessonController::class, 'getLessonsByCourse']);
 
 Route::post('/courses/{id}/lessons/{lesson_id}/contents/register', [ContentController::class, 'store'])->middleware(['auth:sanctum', 'type.teacher']);
+Route::put('/courses/{id}/lessons/{lesson_id}/contents/{content_id}', [ContentController::class, 'update'])->middleware(['auth:sanctum', 'type.teacher']);
 
 
 
