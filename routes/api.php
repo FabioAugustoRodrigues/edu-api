@@ -22,9 +22,9 @@ use Illuminate\Support\Facades\Route;
 // STUDENTS
 Route::post('/students/register', [StudentController::class, 'store']);
 Route::post('/students/login', [StudentController::class, 'login']);
-Route::get('/students/me', [StudentController::class, 'me'])->middleware(['auth:sanctum', 'type.student']);
-Route::put('/students/me', [StudentController::class, 'updateAuthenticatedStudent'])->middleware(['auth:sanctum', 'type.student']);
-Route::delete('/students/me', [StudentController::class, 'deleteAuthenticatedStudent'])->middleware(['auth:sanctum', 'type.student']);
+Route::get('/students/me', [StudentController::class, 'me'])->middleware(['auth:sanctum', 'role:student']);
+Route::put('/students/me', [StudentController::class, 'updateAuthenticatedStudent'])->middleware(['auth:sanctum', 'role:student']);
+Route::delete('/students/me', [StudentController::class, 'deleteAuthenticatedStudent'])->middleware(['auth:sanctum', 'role:student']);
 Route::get('/students/{id}/enrollments', [EnrollmentController::class, 'getByStudent']);
 
 
@@ -32,31 +32,29 @@ Route::get('/students/{id}/enrollments', [EnrollmentController::class, 'getByStu
 // TEACHERS
 Route::post('/teachers/register', [TeacherController::class, 'store']);
 Route::post('/teachers/login', [TeacherController::class, 'login']);
-Route::get('/teachers/me', [TeacherController::class, 'me'])->middleware(['auth:sanctum', 'type.teacher']);
-Route::put('/teachers/me', [TeacherController::class, 'updateAuthenticatedTeacher'])->middleware(['auth:sanctum', 'type.teacher']);
-Route::delete('/teachers/me', [TeacherController::class, 'deleteAuthenticatedTeacher'])->middleware(['auth:sanctum', 'type.teacher']);
+Route::get('/teachers/me', [TeacherController::class, 'me'])->middleware(['auth:sanctum', 'role:teacher']);
+Route::put('/teachers/me', [TeacherController::class, 'updateAuthenticatedTeacher'])->middleware(['auth:sanctum', 'role:teacher']);
+Route::delete('/teachers/me', [TeacherController::class, 'deleteAuthenticatedTeacher'])->middleware(['auth:sanctum', 'role:teacher']);
 Route::get('/teachers/{id}/courses', [CourseController::class, 'getCoursesByTeacher']);
 
 
 
 // COURSES
-Route::post('/courses/register', [CourseController::class, 'store'])->middleware(['auth:sanctum', 'type.teacher']);
+Route::post('/courses/register', [CourseController::class, 'store'])->middleware(['auth:sanctum', 'role:teacher']);
 Route::get('/courses', [CourseController::class, 'getAll']);
 Route::get('/courses/{id}', [CourseController::class, 'getById']);
-Route::put('/courses/{id}', [CourseController::class, 'update'])->middleware(['auth:sanctum', 'type.teacher']);
+Route::put('/courses/{id}', [CourseController::class, 'update'])->middleware(['auth:sanctum', 'role:teacher']);
 
-Route::get('/courses/{id}/enrollments', [EnrollmentController::class, 'getByCourse'])->middleware(['auth:sanctum', 'type.teacher']);
+Route::get('/courses/{id}/enrollments', [EnrollmentController::class, 'getByCourse'])->middleware(['auth:sanctum', 'role:teacher']);
 
-Route::post('/courses/{id}/lessons/register', [LessonController::class, 'store'])->middleware(['auth:sanctum', 'type.teacher']);
-Route::patch('/courses/{id}/lessons/{lesson_id}/name/{name}', [LessonController::class, 'updateName'])->middleware(['auth:sanctum', 'type.teacher']);
-Route::put('/courses/{id}/lessons/orders', [LessonController::class, 'updateOrders'])->middleware(['auth:sanctum', 'type.teacher']);
+Route::post('/courses/{id}/lessons/register', [LessonController::class, 'store'])->middleware(['auth:sanctum', 'role:teacher']);
+Route::patch('/courses/{id}/lessons/{lesson_id}/name/{name}', [LessonController::class, 'updateName'])->middleware(['auth:sanctum', 'role:teacher']);
+Route::put('/courses/{id}/lessons/orders', [LessonController::class, 'updateOrders'])->middleware(['auth:sanctum', 'role:teacher']);
 Route::get('/courses/{id}/lessons', [LessonController::class, 'getLessonsByCourse']);
 
-Route::post('/courses/{id}/lessons/{lesson_id}/contents/register', [ContentController::class, 'store'])->middleware(['auth:sanctum', 'type.teacher']);
-Route::put('/courses/{id}/lessons/{lesson_id}/contents/{content_id}', [ContentController::class, 'update'])->middleware(['auth:sanctum', 'type.teacher']);
-Route::get('/courses/{id}/lessons/{lesson_id}/contents/', [ContentController::class, 'getByLesson'])->middleware(['auth:sanctum', 'type.teacher']);
-
-
+Route::post('/courses/{id}/lessons/{lesson_id}/contents/register', [ContentController::class, 'store'])->middleware(['auth:sanctum', 'role:teacher']);
+Route::put('/courses/{id}/lessons/{lesson_id}/contents/{content_id}', [ContentController::class, 'update'])->middleware(['auth:sanctum', 'role:teacher']);
+Route::get('/courses/{id}/lessons/{lesson_id}/contents/', [ContentController::class, 'getByLesson'])->middleware(['auth:sanctum', 'role:teacher,student']);
 
 // ENROLLMENTS
-Route::post('/enrollments/register', [EnrollmentController::class, 'store'])->middleware(['auth:sanctum', 'type.student']);
+Route::post('/enrollments/register', [EnrollmentController::class, 'store'])->middleware(['auth:sanctum', 'role:student']);
