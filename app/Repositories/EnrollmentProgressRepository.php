@@ -23,6 +23,11 @@ class EnrollmentProgressRepository
         return $this->model->find($id);
     }
 
+    public function getByEnrollmentAndLesson($enrollment_id, $lesson_id)
+    {
+        return $this->model->where("enrollment_id", $enrollment_id)->where("lesson_id", $lesson_id)->first();
+    }
+
     public function create(array $data)
     {
         return $this->model->create($data);

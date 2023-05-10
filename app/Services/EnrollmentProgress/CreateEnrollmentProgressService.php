@@ -2,6 +2,7 @@
 
 namespace App\Services\EnrollmentProgress;
 
+use App\Exceptions\DomainException;
 use App\Repositories\EnrollmentProgressRepository;
 
 class CreateEnrollmentProgressService
@@ -15,6 +16,13 @@ class CreateEnrollmentProgressService
 
     public function execute(int $enrollment_id, int $lesson_id)
     {
+        if ($this->enrollmentProgressRepository->getByEnrollmentAndLesson($enrollment_id, $lesson_id) != null) {
+            throw new DomainException(
+                ["A record of this progress already exists"],
+                409
+            );
+        }
+
         $data = array();
 
         $data['enrollment_id'] = $enrollment_id;
