@@ -48,5 +48,6 @@ class AuthServiceProvider extends ServiceProvider
 
         // ENROLLMENT PROGRESS POLICY
         Gate::define("user-store-enrollment-progress", [EnrollmentProgressPolicy::class, "store"]);
+        Gate::define("user-view-all-enrollment-progress", [EnrollmentProgressPolicy::class, "viewAll"]);
     }
 }

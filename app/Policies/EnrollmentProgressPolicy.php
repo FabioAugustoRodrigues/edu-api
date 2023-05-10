@@ -12,4 +12,9 @@ class EnrollmentProgressPolicy
     {
         return $user->isStudent() && $user->id === $enrollment->student_id && $lesson->course_id === $enrollment->course_id;
     }
+
+    public function viewAll(UserInterface $user, Enrollment $enrollment)
+    {
+        return $user->isStudent() && $user->id === $enrollment->student_id;
+    }
 }

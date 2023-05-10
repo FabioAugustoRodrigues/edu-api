@@ -61,3 +61,4 @@ Route::get('/courses/{id}/lessons/{lesson_id}/contents/', [ContentController::cl
 Route::post('/enrollments/register', [EnrollmentController::class, 'store'])->middleware(['auth:sanctum', 'role:student']);
 
 Route::post('/enrollments/{id}/progress/register', [EnrollmentProgressController::class, 'store'])->middleware(['auth:sanctum', 'role:student']);
+Route::get('/enrollments/{id}/progress', [EnrollmentProgressController::class, 'getByEnrollment'])->middleware(['auth:sanctum', 'role:student']);

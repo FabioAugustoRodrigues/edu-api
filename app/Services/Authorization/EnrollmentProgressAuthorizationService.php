@@ -24,4 +24,15 @@ class EnrollmentProgressAuthorizationService
 
         return true;
     }
+
+    public function viewAll(UserInterface $user, $enrollment_id): bool
+    {
+        $enrollment = $this->findEnrollmentOrFail($enrollment_id);
+
+        if (Gate::denies('user-view-all-enrollment-progress', [$enrollment])) {
+            throw new DomainException(["User does not own the course"], 403);
+        }
+
+        return true;
+    }
 }
