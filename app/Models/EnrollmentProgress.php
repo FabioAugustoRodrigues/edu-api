@@ -12,6 +12,6 @@ class EnrollmentProgress extends Model
     protected $fillable = [
         'enrollment_id',
         'lesson_id',
-        'completed_id'
+        'completed_at'
     ];
 }

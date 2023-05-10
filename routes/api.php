@@ -3,6 +3,7 @@
 use App\Http\Controllers\API\ContentController;
 use App\Http\Controllers\API\CourseController;
 use App\Http\Controllers\API\EnrollmentController;
+use App\Http\Controllers\API\EnrollmentProgressController;
 use App\Http\Controllers\API\LessonController;
 use App\Http\Controllers\API\StudentController;
 use App\Http\Controllers\API\TeacherController;
@@ -58,3 +59,5 @@ Route::get('/courses/{id}/lessons/{lesson_id}/contents/', [ContentController::cl
 
 // ENROLLMENTS
 Route::post('/enrollments/register', [EnrollmentController::class, 'store'])->middleware(['auth:sanctum', 'role:student']);
+
+Route::post('/enrollments/{id}/progress/register', [EnrollmentProgressController::class, 'store'])->middleware(['auth:sanctum', 'role:student']);
