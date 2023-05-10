@@ -26,7 +26,7 @@ Route::post('/students/login', [StudentController::class, 'login']);
 Route::get('/students/me', [StudentController::class, 'me'])->middleware(['auth:sanctum', 'role:student']);
 Route::put('/students/me', [StudentController::class, 'updateAuthenticatedStudent'])->middleware(['auth:sanctum', 'role:student']);
 Route::delete('/students/me', [StudentController::class, 'deleteAuthenticatedStudent'])->middleware(['auth:sanctum', 'role:student']);
-Route::get('/students/{id}/enrollments', [EnrollmentController::class, 'getByStudent']);
+Route::get('/students/me/enrollments', [EnrollmentController::class, 'getByStudent'])->middleware(['auth:sanctum', 'role:student']);
 
 
 

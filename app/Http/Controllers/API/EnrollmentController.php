@@ -39,9 +39,9 @@ class EnrollmentController extends BaseController
         return $this->sendResponse(new EnrollmentResource($this->createEnrollmentService->execute($student_id, $course_id)), "", 201);
     }
 
-    public function getByStudent(Request $request, $student_id)
+    public function getByStudent(Request $request)
     {
-        return $this->sendResponse(new EnrollmentCollection($this->getEnrollmentsByStudentService->execute($student_id)), "", 200);
+        return $this->sendResponse(new EnrollmentCollection($this->getEnrollmentsByStudentService->execute($request->user()->id)), "", 200);
     }
 
     public function getByCourse(Request $request, $course_id)
