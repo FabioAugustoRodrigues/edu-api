@@ -4,14 +4,20 @@ namespace App\Services\EnrollmentProgress;
 
 use App\Exceptions\DomainException;
 use App\Repositories\EnrollmentProgressRepository;
+use App\Repositories\EnrollmentRepository;
 
 class CreateEnrollmentProgressService
 {
     private $enrollmentProgressRepository;
+    private $enrollmentRepository;
 
-    public function __construct(EnrollmentProgressRepository $enrollmentProgressRepository)
+    private $completedEnrollmentVerifierService;
+
+    public function __construct(EnrollmentProgressRepository $enrollmentProgressRepository, EnrollmentRepository $enrollmentRepository, CompletedEnrollmentVerifierService $completedEnrollmentVerifierService)
     {
         $this->enrollmentProgressRepository = $enrollmentProgressRepository;
+        $this->enrollmentRepository = $enrollmentRepository;
+        $this->completedEnrollmentVerifierService = $completedEnrollmentVerifierService;
     }
 
     public function execute(int $enrollment_id, int $lesson_id)
@@ -29,6 +35,12 @@ class CreateEnrollmentProgressService
         $data['lesson_id'] = $lesson_id;
         $data['completed_at'] = date("Y-m-d h:i:s");
 
-        return $this->enrollmentProgressRepository->create($data);
+        $enrollmentProgress = $this->enrollmentProgressRepository->create($data);
+
+        if ($this->completedEnrollmentVerifierService->execute($enrollment_id)) {
+            $this->enrollmentRepository->update($enrollment_id, ["status" => "completed"]);
+        }
+
+        return $enrollmentProgress;
     }
 }
