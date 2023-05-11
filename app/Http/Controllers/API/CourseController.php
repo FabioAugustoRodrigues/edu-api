@@ -48,6 +48,11 @@ class CourseController extends BaseController
         return $this->sendResponse(new CourseResource($course), "", 201);
     }
 
+    public function getCoursesByAuthenticatedTeacher(Request $request)
+    {
+        return $this->sendResponse(new CourseCollection($this->getCoursesByTeacherService->execute($request->user()->id)), 200);
+    }
+
     public function getCoursesByTeacher(Request $request, int $teacher_id)
     {
         return $this->sendResponse(new CourseCollection($this->getCoursesByTeacherService->execute($teacher_id)), 200);

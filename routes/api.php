@@ -39,6 +39,7 @@ Route::post('/teachers/login', [TeacherController::class, 'login']);
 Route::get('/teachers/me', [TeacherController::class, 'me'])->middleware(['auth:sanctum', 'role:teacher']);
 Route::put('/teachers/me', [TeacherController::class, 'updateAuthenticatedTeacher'])->middleware(['auth:sanctum', 'role:teacher']);
 Route::delete('/teachers/me', [TeacherController::class, 'deleteAuthenticatedTeacher'])->middleware(['auth:sanctum', 'role:teacher']);
+Route::get('/teachers/me/courses', [CourseController::class, 'getCoursesByAuthenticatedTeacher'])->middleware(['auth:sanctum', 'role:teacher']);
 Route::get('/teachers/{id}/courses', [CourseController::class, 'getCoursesByTeacher']);
 
 
