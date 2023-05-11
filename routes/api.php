@@ -26,8 +26,11 @@ Route::post('/students/login', [StudentController::class, 'login']);
 Route::get('/students/me', [StudentController::class, 'me'])->middleware(['auth:sanctum', 'role:student']);
 Route::put('/students/me', [StudentController::class, 'updateAuthenticatedStudent'])->middleware(['auth:sanctum', 'role:student']);
 Route::delete('/students/me', [StudentController::class, 'deleteAuthenticatedStudent'])->middleware(['auth:sanctum', 'role:student']);
-Route::get('/students/me/enrollments', [EnrollmentController::class, 'getByStudent'])->middleware(['auth:sanctum', 'role:student']);
 
+Route::get('/students/me/enrollments', [EnrollmentController::class, 'getByStudent'])->middleware(['auth:sanctum', 'role:student']);
+Route::post('students/me/enrollments/register', [EnrollmentController::class, 'store'])->middleware(['auth:sanctum', 'role:student']);
+Route::post('students/me/enrollments/{id}/progress/register', [EnrollmentProgressController::class, 'store'])->middleware(['auth:sanctum', 'role:student']);
+Route::get('students/me/enrollments/{id}/progress', [EnrollmentProgressController::class, 'getByEnrollment'])->middleware(['auth:sanctum', 'role:student']);
 
 
 // TEACHERS
@@ -56,9 +59,3 @@ Route::get('/courses/{id}/lessons', [LessonController::class, 'getLessonsByCours
 Route::post('/courses/{id}/lessons/{lesson_id}/contents/register', [ContentController::class, 'store'])->middleware(['auth:sanctum', 'role:teacher']);
 Route::put('/courses/{id}/lessons/{lesson_id}/contents/{content_id}', [ContentController::class, 'update'])->middleware(['auth:sanctum', 'role:teacher']);
 Route::get('/courses/{id}/lessons/{lesson_id}/contents/', [ContentController::class, 'getByLesson'])->middleware(['auth:sanctum', 'role:teacher,student']);
-
-// ENROLLMENTS
-Route::post('/enrollments/register', [EnrollmentController::class, 'store'])->middleware(['auth:sanctum', 'role:student']);
-
-Route::post('/enrollments/{id}/progress/register', [EnrollmentProgressController::class, 'store'])->middleware(['auth:sanctum', 'role:student']);
-Route::get('/enrollments/{id}/progress', [EnrollmentProgressController::class, 'getByEnrollment'])->middleware(['auth:sanctum', 'role:student']);
