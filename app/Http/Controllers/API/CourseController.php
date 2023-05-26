@@ -50,17 +50,41 @@ class CourseController extends BaseController
 
     public function getCoursesByAuthenticatedTeacher(Request $request)
     {
-        return $this->sendResponse(new CourseCollection($this->getCoursesByTeacherService->execute($request->user()->id)), 200);
+        $perPage = $request->query('per_page', 5);
+        $page = $request->query('page', 1);
+
+        return $this->sendResponse(
+            new CourseCollection(
+                $this->getCoursesByTeacherService->execute($request->user()->id, $perPage, $page)
+            ),
+            200
+        );
     }
 
     public function getCoursesByTeacher(Request $request, int $teacher_id)
     {
-        return $this->sendResponse(new CourseCollection($this->getCoursesByTeacherService->execute($teacher_id)), 200);
+        $perPage = $request->query('per_page', 5);
+        $page = $request->query('page', 1);
+
+        return $this->sendResponse(
+            new CourseCollection(
+                $this->getCoursesByTeacherService->execute($teacher_id, $perPage, $page)
+            ),
+            200
+        );
     }
 
     public function getAll(Request $request)
     {
-        return $this->sendResponse(new CourseCollection($this->getAllCoursesService->execute()), 200);
+        $perPage = $request->query('per_page', 5);
+        $page = $request->query('page', 1);
+
+        return $this->sendResponse(
+            new CourseCollection(
+                $this->getAllCoursesService->execute($perPage, $page)
+            ),
+            200
+        );
     }
 
     public function getById(Request $request, $id)

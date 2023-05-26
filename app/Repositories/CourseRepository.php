@@ -13,9 +13,11 @@ class CourseRepository
         $this->model = $model;
     }
 
-    public function getAll()
+    public function getAll(int $perPage = 5, int $page = 1)
     {
-        return $this->model->all();
+        $query = $this->model->query();
+
+        return $query->paginate($perPage, ['*'], 'page', $page);
     }
 
     public function getById($id)
@@ -23,9 +25,12 @@ class CourseRepository
         return $this->model->find($id);
     }
 
-    public function getByTeacher(int $teacher_id)
+    public function getByTeacher(int $teacher_id, int $perPage = 5, int $page = 1)
     {
-        return $this->model->where('teacher_id', $teacher_id)->get();
+        $query = $this->model->query();
+        $query->where('teacher_id', $teacher_id);
+
+        return $query->paginate($perPage, ['*'], 'page', $page);
     }
 
     public function create(array $data)
