@@ -48,13 +48,19 @@ class EnrollmentRepository
         return $this->model->where('student_id', $student_id)->where('course_id', $course_id)->first();
     }
 
-    public function getByStudent(int $student_id)
+    public function getByStudent(int $student_id, int $perPage = 5, int $page = 1)
     {
-        return $this->model->where('student_id', $student_id)->get();
+        $query = $this->model->query();
+        $query->where('student_id', $student_id);
+
+        return $query->paginate($perPage, ['*'], 'page', $page);
     }
 
-    public function getByCourse(int $course_id)
+    public function getByCourse(int $course_id, int $perPage = 5, int $page = 1)
     {
-        return $this->model->where('course_id', $course_id)->get();
+        $query = $this->model->query();
+        $query->where('course_id', $course_id);
+
+        return $query->paginate($perPage, ['*'], 'page', $page);
     }
 }

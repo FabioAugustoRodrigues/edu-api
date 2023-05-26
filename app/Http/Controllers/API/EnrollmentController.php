@@ -41,13 +41,31 @@ class EnrollmentController extends BaseController
 
     public function getByStudent(Request $request)
     {
-        return $this->sendResponse(new EnrollmentCollection($this->getEnrollmentsByStudentService->execute($request->user()->id)), "", 200);
+        $perPage = $request->query('per_page', 5);
+        $page = $request->query('page', 1);
+
+        return $this->sendResponse(
+            new EnrollmentCollection(
+                $this->getEnrollmentsByStudentService->execute($request->user()->id, $perPage, $page)
+            ),
+            "",
+            200
+        );
     }
 
     public function getByCourse(Request $request, $course_id)
     {
         $this->enrollmentAuthorizationService->view($request->user(), $course_id);
 
-        return $this->sendResponse(new EnrollmentCollection($this->getEnrollmentsByCourseService->execute($course_id)), "", 200);
+        $perPage = $request->query('per_page', 5);
+        $page = $request->query('page', 1);
+
+        return $this->sendResponse(
+            new EnrollmentCollection(
+                $this->getEnrollmentsByCourseService->execute($course_id, $perPage, $page)
+            ),
+            "",
+            200
+        );
     }
 }
