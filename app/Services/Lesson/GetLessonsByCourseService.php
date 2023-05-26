@@ -17,13 +17,13 @@ class GetLessonsByCourseService
         $this->courseRepository = $courseRepository;
     }
 
-    public function execute(int $course_id)
+    public function execute(int $course_id, int $perPage = 5, int $page = 1)
     {
         $existingCourse = $this->courseRepository->getById($course_id);
         if (!$existingCourse) {
             throw new DomainException(['Course not found'], 404);
         }
 
-        return $this->lessonRepository->getByCourse($course_id);
+        return $this->lessonRepository->getByCourse($course_id, $perPage, $page);
     }
 }

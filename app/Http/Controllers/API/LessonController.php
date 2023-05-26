@@ -45,7 +45,16 @@ class LessonController extends BaseController
 
     public function getLessonsByCourse(Request $request, $course_id)
     {
-        return $this->sendResponse(new LessonCollection($this->getLessonsByCourseService->execute($course_id)), "", 200);
+        $perPage = $request->query('per_page', 5);
+        $page = $request->query('page', 1);
+
+        return $this->sendResponse(
+            new LessonCollection(
+                $this->getLessonsByCourseService->execute($course_id, $perPage, $page)
+            ),
+            "",
+            200
+        );
     }
 
     public function updateName(Request $request, $course_id, $lesson_id, $name)

@@ -28,9 +28,12 @@ class LessonRepository
         return $this->model->where('course_id', $course_id)->where('lesson_order', $lesson_order)->first();
     }
 
-    public function getByCourse(int $course_id)
+    public function getByCourse(int $course_id, int $perPage = 5, int $page = 1)
     {
-        return $this->model->where('course_id', $course_id)->get();
+        $query = $this->model->query();
+        $query->where('course_id', $course_id);
+
+        return $query->paginate($perPage, ['*'], 'page', $page);
     }
 
     public function create(array $data)
