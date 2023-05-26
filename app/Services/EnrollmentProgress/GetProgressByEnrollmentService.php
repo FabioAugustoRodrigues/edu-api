@@ -13,8 +13,8 @@ class GetProgressByEnrollmentService
         $this->enrollmentProgressRepository = $enrollmentProgressRepository;
     }
 
-    public function execute(int $enrollment_id)
+    public function execute(int $enrollment_id, int $perPage = 5, int $page = 1)
     {
-        return $this->enrollmentProgressRepository->getByEnrollment($enrollment_id);
+        return $this->enrollmentProgressRepository->getByEnrollment($enrollment_id, $perPage, $page);
     }
 }

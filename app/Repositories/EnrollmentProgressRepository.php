@@ -28,9 +28,12 @@ class EnrollmentProgressRepository
         return $this->model->where("enrollment_id", $enrollment_id)->where("lesson_id", $lesson_id)->first();
     }
 
-    public function getByEnrollment($enrollment_id)
+    public function getByEnrollment($enrollment_id, int $perPage = 5, int $page = 1)
     {
-        return $this->model->where("enrollment_id", $enrollment_id)->get();
+        $query = $this->model->query();
+        $query->where('enrollment_id', $enrollment_id);
+
+        return $query->paginate($perPage, ['*'], 'page', $page);
     }
 
     public function create(array $data)

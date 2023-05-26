@@ -40,6 +40,15 @@ class EnrollmentProgressController extends BaseController
     {
         $this->enrollmentProgressAuthorizationService->viewAll($request->user(), $enrollment_id);
 
-        return $this->sendResponse(new EnrollmentProgressCollection($this->getProgressByEnrollmentService->execute($enrollment_id)), "", 200);
+        $perPage = $request->query('per_page', 5);
+        $page = $request->query('page', 1);
+
+        return $this->sendResponse(
+            new EnrollmentProgressCollection(
+                $this->getProgressByEnrollmentService->execute($enrollment_id, $perPage, $page)
+            ),
+            "",
+            200
+        );
     }
 }
