@@ -41,12 +41,14 @@ class EnrollmentController extends BaseController
 
     public function getByStudent(Request $request)
     {
+        $searchParams = $request->only(['status']);
+
         $perPage = $request->query('per_page', 5);
         $page = $request->query('page', 1);
 
         return $this->sendResponse(
             new EnrollmentCollection(
-                $this->getEnrollmentsByStudentService->execute($request->user()->id, $perPage, $page)
+                $this->getEnrollmentsByStudentService->execute($request->user()->id, $perPage, $page, $searchParams)
             ),
             "",
             200

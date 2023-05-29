@@ -48,10 +48,15 @@ class EnrollmentRepository
         return $this->model->where('student_id', $student_id)->where('course_id', $course_id)->first();
     }
 
-    public function getByStudent(int $student_id, int $perPage = 5, int $page = 1)
+    public function getByStudent(int $student_id, int $perPage = 5, int $page = 1, array $searchParams = [])
     {
         $query = $this->model->query();
         $query->where('student_id', $student_id);
+
+        if (isset($searchParams['status']) && !empty($searchParams['status'])) {
+            $status = $searchParams['status'];
+            $query->where('status', $status);
+        }
 
         return $query->paginate($perPage, ['*'], 'page', $page);
     }

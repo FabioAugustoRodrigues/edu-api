@@ -17,13 +17,13 @@ class GetEnrollmentsByStudentService
         $this->studentRepository = $studentRepository;
     }
 
-    public function execute(int $student_id, int $perPage = 5, int $page = 1)
+    public function execute(int $student_id, int $perPage = 5, int $page = 1, array $searchParams = [])
     {
         $existingStudent = $this->studentRepository->getById($student_id);
         if (!$existingStudent) {
             throw new DomainException(['Student not found'], 404);
         }
 
-        return $this->enrollmentRepository->getByStudent($student_id, $perPage, $page);
+        return $this->enrollmentRepository->getByStudent($student_id, $perPage, $page, $searchParams);
     }
 }
