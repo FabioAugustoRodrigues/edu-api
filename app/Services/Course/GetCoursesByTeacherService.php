@@ -17,7 +17,7 @@ class GetCoursesByTeacherService
         $this->teacherRepository = $teacherRepository;
     }
 
-    public function execute(int $teacher_id, int $perPage = 5, int $page = 1)
+    public function execute(int $teacher_id, int $perPage = 5, int $page = 1, array $searchParams = [])
     {
         $existingTeacher = $this->teacherRepository->getById($teacher_id);
 
@@ -25,6 +25,6 @@ class GetCoursesByTeacherService
             throw new DomainException(['Teacher not found'], 404);
         }
 
-        return $this->courseRepository->getByTeacher($teacher_id, $perPage, $page);
+        return $this->courseRepository->getByTeacher($teacher_id, $perPage, $page, $searchParams);
     }
 }

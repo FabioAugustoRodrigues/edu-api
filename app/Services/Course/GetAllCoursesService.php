@@ -13,8 +13,8 @@ class GetAllCoursesService
         $this->courseRepository = $courseRepository;
     }
 
-    public function execute(int $perPage = 5, int $page = 1)
+    public function execute(int $perPage = 5, int $page = 1, array $searchParams = [])
     {
-        return $this->courseRepository->getAll($perPage, $page);
+        return $this->courseRepository->getAll($perPage, $page, $searchParams);
     }
 }

@@ -13,9 +13,14 @@ class CourseRepository
         $this->model = $model;
     }
 
-    public function getAll(int $perPage = 5, int $page = 1)
+    public function getAll(int $perPage = 5, int $page = 1, array $searchParams = [])
     {
         $query = $this->model->query();
+
+        if (isset($searchParams['name']) && !empty($searchParams['name'])) {
+            $name = $searchParams['name'];
+            $query->where('name', 'LIKE', "%$name%");
+        }
 
         return $query->paginate($perPage, ['*'], 'page', $page);
     }
@@ -25,10 +30,15 @@ class CourseRepository
         return $this->model->find($id);
     }
 
-    public function getByTeacher(int $teacher_id, int $perPage = 5, int $page = 1)
+    public function getByTeacher(int $teacher_id, int $perPage = 5, int $page = 1, array $searchParams = [])
     {
         $query = $this->model->query();
         $query->where('teacher_id', $teacher_id);
+
+        if (isset($searchParams['name']) && !empty($searchParams['name'])) {
+            $name = $searchParams['name'];
+            $query->where('name', 'LIKE', '%' . $name . '%');
+        }
 
         return $query->paginate($perPage, ['*'], 'page', $page);
     }

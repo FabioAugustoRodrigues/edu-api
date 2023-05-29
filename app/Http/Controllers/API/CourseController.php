@@ -50,12 +50,14 @@ class CourseController extends BaseController
 
     public function getCoursesByAuthenticatedTeacher(Request $request)
     {
+        $searchParams = $request->only(['name']);
+
         $perPage = $request->query('per_page', 5);
         $page = $request->query('page', 1);
 
         return $this->sendResponse(
             new CourseCollection(
-                $this->getCoursesByTeacherService->execute($request->user()->id, $perPage, $page)
+                $this->getCoursesByTeacherService->execute($request->user()->id, $perPage, $page, $searchParams)
             ),
             200
         );
@@ -76,12 +78,14 @@ class CourseController extends BaseController
 
     public function getAll(Request $request)
     {
+        $searchParams = $request->only(['name']);
+
         $perPage = $request->query('per_page', 5);
         $page = $request->query('page', 1);
 
         return $this->sendResponse(
             new CourseCollection(
-                $this->getAllCoursesService->execute($perPage, $page)
+                $this->getAllCoursesService->execute($perPage, $page, $searchParams)
             ),
             200
         );
